@@ -13,9 +13,12 @@ essid = str(sys.argv[2])
 
 def ping(host):
     status,result = subprocess.getstatusoutput("ping -c1 -w2 " + host)
-    ms = result.split("time=")[1].split(" ")[0] # get the time in ms
+    ms = 0
 
-    return [status == 0, ms + "ms"]
+    if status == 0:
+        ms = result.split("time=")[1].split(" ")[0] # get the time in ms
+
+    return [status == 0, ms]
 
 def connectToWifi():
     """
@@ -30,7 +33,7 @@ def connectToWifi():
 while True:
     [connected, ms] = ping(ip_address)
     if connected:
-        print("Connected to " + ip_address, ms)
+        print("Connected to " + ip_address, ms + "ms")
     else:
         print("Could not connect to " + ip_address)
         print("Re-connect wifi to " + essid)
